@@ -1,17 +1,16 @@
 package au.edu.jcu.sp3406.shopping_list;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
@@ -21,24 +20,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button add = findViewById(R.id.add);
-        Button settings = findViewById(R.id.settings);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-    }
+        Bundle extras = getIntent().getExtras();
 
-    public void addItem(View view){
-        EditText text = findViewById(R.id.editText);
-        String item = text.getText().toString();
-        if(item.equals("")){
-            Toast.makeText(this, "Please enter an item!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            ListView list = findViewById(R.id.list);
-            adapter.addAll(item);
+        if (extras != null) {
+            String item1 = extras.getString("item");
+            list = findViewById(R.id.list);
+            if (savedInstanceState != null) {
+                String savedState = savedInstanceState.getString("savedState");
+                adapter.addAll(savedState);
+            }
+            adapter.add(item1);
+            adapter.addAll("test");
             list.setAdapter(adapter);
-            Toast.makeText(this, "Item added!", Toast.LENGTH_SHORT).show();
-            text.setText("");
         }
 
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String item = adapter.getItem(position);
+//                adapter.remove(item);
+//                //Toast.makeText(this, "deleted", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
+
+    public void add(View view) {
+        Intent intent = new Intent(this, AddToList.class);
+        startActivity(intent);
     }
+}
