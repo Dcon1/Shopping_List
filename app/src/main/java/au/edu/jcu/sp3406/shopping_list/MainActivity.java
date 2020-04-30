@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        //outState.getStringArray(String.valueOf(adapter));
+    }
+
     public void add(View view) {
         Intent intent = new Intent(this, AddToList.class);
         startActivity(intent);
